@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Classificação de Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Classificação de Usuário</h1>
+        <div id="resultado" class="resultado">
+            <!-- Os resultados serão exibidos aqui -->
+        </div>
+    </div>
+
+    <script>
+        // Solicitar informações ao usuário
+        const idadeInput = prompt("Digite sua idade:");
+        const statusInput = prompt("Você está registrado? (Digite 'registrado' ou 'não registrado'):");
+        
+        // Converter entrada de idade para número
+        const idade = parseInt(idadeInput);
+        
+        // Validar se a idade é um número válido
+        if (isNaN(idade) || idade <= 0) {
+            document.getElementById('resultado').innerHTML = 
+                '<p style="color: red;">Idade inválida! Por favor, recarregue a página e insira uma idade válida.</p>';
+        } else {
+            // 1. Operador Ternário para verificar maioridade
+            const maioridade = idade >= 18 ? "maior de idade" : "menor de idade";
+            const mensagemIdade = `Você tem ${idade} anos e é ${maioridade}.`;
+            
+            // 2. Estrutura Switch para status do usuário
+            let mensagemStatus = "";
+            let statusNormalizado = "";
+            
+            switch(statusInput?.toLowerCase().trim()) {
+                case "registrado":
+                    mensagemStatus = "Bem-vindo(a) de volta! Aproveite todos os recursos.";
+                    statusNormalizado = "registrado";
+                    break;
+                case "não registrado":
+                case "nao registrado":
+                    mensagemStatus = "Complete seu registro para acessar todos os benefícios.";
+                    statusNormalizado = "não registrado";
+                    break;
+                default:
+                    mensagemStatus = "Status desconhecido. Entre em contato com o suporte.";
+                    statusNormalizado = "desconhecido";
+            }
+            
+            // 3. Operadores Lógicos para verificar condições combinadas
+            const usuarioMaiorIdade = idade >= 18;
+            const usuarioRegistrado = statusNormalizado === "registrado";
+            
+            let mensagemAcesso = "";
+            
+            // Verificação com operadores lógicos
+            if (usuarioMaiorIdade && usuarioRegistrado) {
+                mensagemAcesso = "✅ Acesso completo liberado! Você pode acessar todos os recursos.";
+            } else if (!usuarioMaiorIdade || !usuarioRegistrado) {
+                mensagemAcesso = "⚠️ Acesso limitado. Algumas funcionalidades podem estar restritas.";
+            }
+            
+            // Exibir resultados na página
+            const resultadoHTML = `
+                <h3>Resultado da Classificação:</h3>
+                <p><strong>${mensagemIdade}</strong></p>
+                <p><strong>Status:</strong> ${mensagemStatus}</p>
+                <p><strong>Nível de Acesso:</strong> ${mensagemAcesso}</p>
+                
+                <h3>Detalhes da Análise:</h3>
+                <ul>
+                    <li>Maior de idade? ${usuarioMaiorIdade ? "Sim" : "Não"}</li>
+                    <li>Usuário registrado? ${usuarioRegistrado ? "Sim" : "Não"}</li>
+                    <li>Condição (maioridade E registrado): ${usuarioMaiorIdade && usuarioRegistrado ? "Verdadeira" : "Falsa"}</li>
+                    <li>Condição (menoridade OU não registrado): ${!usuarioMaiorIdade || !usuarioRegistrado ? "Verdadeira" : "Falsa"}</li>
+                </ul>
+                
+                <hr>
+                <h3>Explicação dos Operadores Usados:</h3>
+                <p>1. <strong>Operador Ternário:</strong> ${idade} >= 18 ? "maior de idade" : "menor de idade"</p>
+                <p>2. <strong>Operadores Lógicos:</strong> 
+                   <br>- && (E): idade >= 18 && status === "registrado"
+                   <br>- || (OU): idade < 18 || status !== "registrado"
+                </p>
+            `;
+            
+            document.getElementById('resultado').innerHTML = resultadoHTML;
+            
+            // Também exibir no console para referência
+            console.log("=== Sistema de Classificação ===");
+            console.log("Idade:", idade, "anos");
+            console.log("Status:", statusNormalizado);
+            console.log("Maioridade:", maioridade);
+            console.log("Mensagem de Status:", mensagemStatus);
+            console.log("Mensagem de Acesso:", mensagemAcesso);
+            console.log("===============================");
+        }
+    </script>
+</body>
+</html>
